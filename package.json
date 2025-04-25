@@ -1,0 +1,62 @@
+{
+  "name": "loan-component",
+  "description": "Webcomponent loan-component following open-wc recommendations",
+  "license": "MIT",
+  "author": "loan-component",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "index.js",
+  "module": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./loan-component.js": "./loan-component.js"
+  },
+  "scripts": {
+    "analyze": "cem analyze --litelement",
+    "start": "web-dev-server",
+    "lint": "eslint --ext .js,.html . --ignore-path .gitignore && prettier \"**/*.js\" --check --ignore-path .gitignore",
+    "format": "eslint --ext .js,.html . --fix --ignore-path .gitignore && prettier \"**/*.js\" --write --ignore-path .gitignore",
+    "prepare": "husky",
+    "storybook": "npm run analyze -- --exclude dist && storybook dev -p 8080",
+    "storybook:build": "npm run analyze -- --exclude dist && storybook build"
+  },
+  "dependencies": {
+    "@lion/ui": "^0.11.2",
+    "@lion/validate": "^0.11.0",
+    "lit": "^3.1.4"
+  },
+  "devDependencies": {
+    "@custom-elements-manifest/analyzer": "^0.10.3",
+    "@open-wc/eslint-config": "^12.0.3",
+    "@storybook/addon-a11y": "^7.6.20",
+    "@storybook/addon-essentials": "^7.6.20",
+    "@storybook/addon-links": "^7.6.20",
+    "@storybook/web-components": "^7.6.20",
+    "@web/dev-server": "^0.4.6",
+    "@web/storybook-builder": "^0.1.16",
+    "@web/storybook-framework-web-components": "^0.1.2",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.7",
+    "prettier": "^3.3.2",
+    "storybook": "^7.6.20"
+  },
+  "customElements": "custom-elements.json",
+  "eslintConfig": {
+    "extends": [
+      "@open-wc",
+      "prettier"
+    ]
+  },
+  "prettier": {
+    "singleQuote": true,
+    "arrowParens": "avoid"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  }
+}
