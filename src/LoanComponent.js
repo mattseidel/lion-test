@@ -1,5 +1,8 @@
 import { html, css, LitElement } from 'lit';
-import "./components/form/IbanInput.js";
+import '@webcomponents/scoped-custom-element-registry';
+import './components/form/IbanInput.js';
+import './components/form/form.js';
+import './components/button.js';
 
 export class LoanComponent extends LitElement {
   static styles = css`
@@ -12,8 +15,6 @@ export class LoanComponent extends LitElement {
       background-color: var(--loan-component-bg-color, #fff);
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       height: 100%;
-      width: 100%;
-      max-width: 600px;
       margin: 0 auto;
     }
   `;
@@ -29,15 +30,25 @@ export class LoanComponent extends LitElement {
     this.counter = 5;
   }
 
-  __increment() {
-    this.counter += 1;
+  submit() {
+    const form = this.renderRoot.querySelector('formulary-component');
+    if (!form) {
+      throw new Error('Form not found');
+    }
+    form.submit();
   }
 
   render() {
     return html`
-      <form>
-        <iban-input></iban-input> 
-      </form>
+      <formulary-component @form-submitted="${console.log}">
+        <iban-input></iban-input>
+        <loan-button
+          type="submit"
+          label="Submit"
+          @click="${this.submit}"
+          className="submit-button"
+        ></loan-button>
+      </formulary-component>
     `;
   }
 }
