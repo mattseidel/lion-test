@@ -9,6 +9,23 @@ export class Formulary extends ScopedElementsMixin(LitElement) {
     };
   }
 
+  constructor() {
+    super();
+    this.isSubmitting = false;
+    this.serializedValue = {};
+    this.errors = {};
+    this.validate = this.validate.bind(this);
+    this.isValid = this.isValid.bind(this);
+  }
+
+  firstUpdated() {
+    this._formElement = this.renderRoot.querySelector('lion-form');
+    this._formElement.addEventListener('reset', e => {
+      e.preventDefault();
+      this.reset();
+    });
+  }
+
   static get properties() {
     return {
       isSubmitting: { type: Boolean },
@@ -18,19 +35,13 @@ export class Formulary extends ScopedElementsMixin(LitElement) {
   }
 
   async submit() {
-    this.isSubmitting = true;
-    console.log(this._formElement.childNodes.entries);
-
+    const errors = await this._formElement.validate();
+    if (errors.length > 0) {
+      this.errors = errors;
+      return;
+    }
     this.serializedValue = await this._formElement.serializeValue();
-    this.dispatchEvent(
-      new CustomEvent('form-submitted', {
-        detail: this.serializedValue,
-        bubbles: true,
-        composed: true,
-      }),
-    );
-    this.errors = await this._formElement.validate();
-    this.isSubmitting = false;
+    this.dispatchEvent(/* evento */);
   }
 
   async isValid() {
@@ -54,14 +65,10 @@ export class Formulary extends ScopedElementsMixin(LitElement) {
     return !this._formElement.hasFeedbackFor.includes('error');
   }
 
-  firstUpdated() {
-    this._formElement = this.renderRoot.querySelector('lion-form');
-  }
-
   render() {
     return html`
-      <lion-form @submit="${this.submit}">
-        <form>
+      <lion-form>
+        <form @submit="${this.submit}">
           <slot></slot>
         </form>
       </lion-form>
